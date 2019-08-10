@@ -1,3 +1,6 @@
+/**
+ * 公共头部
+ */
 import React, {useState} from 'react'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -11,6 +14,9 @@ import MenuItem from '@material-ui/core/MenuItem'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import NotificationsIcon from '@material-ui/icons/Notifications'
 import { withStyles, Theme } from '@material-ui/core/styles'
+import ConfirmDialog from '../ConfirmDialog'
+
+const drawerWidth = 240
 
 const styles = (theme: Theme) => ({
   appBar: {
@@ -19,6 +25,14 @@ const styles = (theme: Theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     })
+  },
+  appBarShift: {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
   },
   toolBar: {
     paddingRight: 24
@@ -39,23 +53,26 @@ const styles = (theme: Theme) => ({
 })
 
 interface HeaderProps {
-  classes: any
+  classes: any;
+  open: boolean;
+  drawerOpen: (value: boolean) => void;
 }
 
 const Header:React.FC<HeaderProps> = (props) => {
   const { classes } = props
-  const [open, setOpen] = useState(true)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const [visible, setVisible] = useState(false)
 
   const isMenuOpen = Boolean(anchorEl)
   /**
    * 导航切换
    */
   const handleDrawerOpen = ():void => {
-    setOpen(true)
+    props.drawerOpen(true)
   }
   const handleMenuClose = ():void => {
     setAnchorEl(null)
+    setVisible(true)
   }
   /**
    * 个人中心打开
@@ -68,6 +85,16 @@ const Header:React.FC<HeaderProps> = (props) => {
    */
   const handleMobileMenuOpen = ():void => {
 
+  }
+  /**
+   * 退出提示对话框
+   */
+  const handleOnConfirm = ():void => {
+    alert('退出..')
+    setVisible(false)
+  }
+  const handleOnCancel = ():void => {
+    setVisible(false)
   }
   const menuId = 'primary-search-account-menu'
   const renderMenu = (
@@ -84,8 +111,9 @@ const Header:React.FC<HeaderProps> = (props) => {
       <MenuItem onClick={handleMenuClose}>退出</MenuItem>
     </Menu>
   )
+  const { open } = props
   return (
-    <AppBar>
+    <AppBar position="absolute" className={`${classes.appBar} ${open && classes.appBarShift}`} >
       <Toolbar className={classes.toolBar}>
         <IconButton
           edge="start"
@@ -123,6 +151,12 @@ const Header:React.FC<HeaderProps> = (props) => {
           </div>
       </Toolbar>
       {renderMenu}
+      <ConfirmDialog
+        open={visible}
+        onCancel={handleOnCancel}
+        text="确认要退出吗?"
+        onConfirm={handleOnConfirm}
+      />
     </AppBar>
   )
 }
