@@ -6,8 +6,17 @@ import Routes from './routes'
 import * as serviceWorker from './serviceWorker'
 import { createMuiTheme } from '@material-ui/core/styles'
 import { ThemeProvider } from '@material-ui/styles'
+import blue from '@material-ui/core/colors/blue'
 
-const theme = createMuiTheme()
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      light: blue[300],
+      main: blue[700],
+      dark: blue[500]
+    }
+  }
+})
 
 ReactDOM.render(<ThemeProvider theme={theme}>
   <Routes />

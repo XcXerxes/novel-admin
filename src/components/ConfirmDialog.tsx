@@ -5,9 +5,17 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogActions from '@material-ui/core/DialogActions'
-import Grid from '@material-ui/core/Grid'
+import { createStyles, withStyles, Theme } from '@material-ui/core/styles'
+
+const styles = (theme: Theme) => createStyles({
+  actions: {
+    paddingLeft: theme.spacing(3),
+    paddingRight: theme.spacing(3)
+  }
+})
 
 export interface ConfirmDialogProps {
+  classes: Record<string, string>;
   onClose?: () => void;
   open: boolean;
   text: string;
@@ -16,14 +24,14 @@ export interface ConfirmDialogProps {
 }
 
 const ConfirmDialog:React.FC<ConfirmDialogProps> = (props) => {
-  const { onClose, open, text, onConfirm, onCancel, ...newProps } = props
+  const { classes, onClose, open, text, onConfirm, onCancel, ...newProps } = props
   return (
     <Dialog disableBackdropClick fullWidth disableEscapeKeyDown maxWidth="xs" open={open} {...newProps}>
       <DialogTitle>提示</DialogTitle>
       <DialogContent>
         <DialogContentText>{text}</DialogContentText>
       </DialogContent>
-      <DialogActions>
+      <DialogActions className={classes.actions}>
         <Button variant="contained" fullWidth onClick={onCancel}>取消</Button>
         <Button variant="contained" fullWidth color="primary" onClick={onConfirm}>确认</Button>
       </DialogActions>
@@ -31,4 +39,4 @@ const ConfirmDialog:React.FC<ConfirmDialogProps> = (props) => {
   )
 }
 
-export default ConfirmDialog
+export default withStyles(styles)(ConfirmDialog)

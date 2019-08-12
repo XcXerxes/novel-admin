@@ -3,6 +3,8 @@ import ListItem from '@material-ui/core/ListItem'
 import Button from '@material-ui/core/Button'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
+import ExpandLess from '@material-ui/icons/ExpandLess'
+import ExpandMore from '@material-ui/icons/ExpandMore'
 
 import Collapse from '@material-ui/core/Collapse'
 import { NavLink as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom'
@@ -31,6 +33,7 @@ const styles = (theme: Theme) => createStyles({
     justifyContent: 'flex-start',
     textTransform: 'none',
     width: '100%',
+    textAlign: 'left'
   },
   buttonLeaf: {
     letterSpacing: 0,
@@ -48,6 +51,12 @@ const styles = (theme: Theme) => createStyles({
   },
   itemIcon: {
     color: 'inherit' 
+  },
+  icon: {
+    transition: theme.transitions.create(['all'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    })
   }
 })
 
@@ -115,8 +124,9 @@ const MenuItem = (props: MenuItemProps) => {
           {React.createElement(icon)}
         </ListItemIcon>
         <ListItemText>{title}</ListItemText>
+        {open ? <ExpandLess className={classes.icon} /> : <ExpandMore className={classes.icon} />}
       </Button>
-      <Collapse in={open} timeout="auto" unmountOnExit >
+      <Collapse in={open} timeout="auto" unmountOnExit>
         {children}
       </Collapse>
     </ListItem>
